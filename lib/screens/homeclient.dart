@@ -5,19 +5,13 @@ import 'package:wyc/screens/product_client.dart';
 import 'package:wyc/screens/product_cart.dart';
 import 'package:wyc/screens/homecliente.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-
-// import 'package:site/screens/profile.dart';
-// import 'package:site/screens/api_service.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Category {
   final String id;
   final String name;
 
   Category({required this.id, required this.name});
-
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(id: json['id'], name: json['name']);
-  }
 }
 
 class Homeclient extends StatefulWidget {
@@ -44,6 +38,7 @@ class _HomeclientState extends State<Homeclient> {
   @override
   void initState() {
     super.initState();
+    fetchCategories(); // Fetch categories when the screen loads
     getProducts();
     _bannerAd = BannerAd(
       adUnitId:
@@ -63,8 +58,6 @@ class _HomeclientState extends State<Homeclient> {
       ),
     )..load();
   }
-
-
 
   Future<void> getProducts() async {
     var response = await http.get(Uri.parse(productsUrl));
@@ -87,10 +80,46 @@ class _HomeclientState extends State<Homeclient> {
     });
   }
 
+  void filterByCategory(String categoryId) {
+    final filtered =
+        products.where((product) {
+          // On suppose que dans chaque produit il y a un champ 'category_id'
+          // Sinon adapte selon ta structure de données
+          return product['category_id'].toString() == categoryId;
+        }).toList();
+
+    setState(() {
+      filteredProducts = filtered;
+    });
+  }
+
   @override
   void dispose() {
     _bannerAd.dispose(); // 👈 ici on libère la ressource pub
     super.dispose();
+  }
+
+  // Récupérer les catégories depuis l'API
+  Future<void> fetchCategories() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://floating-sea-30778-fbe8564bd579.herokuapp.com/api/categories',
+      ),
+    );
+    if (response.statusCode == 200) {
+      List data = json.decode(response.body);
+      setState(() {
+        categories =
+            data
+                .map(
+                  (item) =>
+                      Category(id: item['id'].toString(), name: item['name']),
+                )
+                .toList();
+      });
+    } else {
+      print('Erreur lors de la récupération des catégories');
+    }
   }
 
   @override
@@ -170,8 +199,9 @@ class _HomeclientState extends State<Homeclient> {
             SizedBox(height: 25),
 
             Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centrer horizontalement
               children: [
-                SizedBox(width: 270),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushReplacement(
@@ -203,23 +233,82 @@ class _HomeclientState extends State<Homeclient> {
                 ),
               ],
             ),
+
             SizedBox(height: 25),
             Container(
-              width: 400, // Largeur du container
-              height: 220, // Hauteur du container
+              width: 400,
+              height: 220,
               decoration: BoxDecoration(
-                color: Color(0xFFd0b258), // Couleur de fond
-                borderRadius: BorderRadius.circular(20), // Rayon des coins
+                color: Color(0xFFd0b258),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
-                child: SizedBox(
-                  width: 190, // Largeur de l'image
-                  height: 190, // Hauteur de l'image
-                  child: Image.asset(
-                    'assets/images/102.png',
-                    fit: BoxFit.cover,
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    autoPlay: true,
+                    enlargeCenterPage: false, // Pas d'effet de zoom
+                    viewportFraction:
+                        1.0, // Chaque image prend 100% de l'espace
+                    height: 190,
                   ),
+                  items:
+                      [
+                        'assets/images/102.png',
+                        // 'assets/images/113.png',
+                        // 'assets/images/114.png',
+                      ].map((imagePath) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Image.asset(
+                            imagePath,
+                            fit: BoxFit.cover,
+                            width: 200,
+                            height: 190,
+                          ),
+                        );
+                      }).toList(),
                 ),
+              ),
+            ),
+
+            SizedBox(height: 25),
+            Container(
+              height: 50,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          filteredProducts =
+                              products; // Montre tous les produits
+                        });
+                      },
+                      child: Chip(
+                        label: Text('Tous'),
+                        backgroundColor: Colors.grey.shade400,
+                        labelStyle: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  ...categories.map((category) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          filterByCategory(category.id);
+                        },
+                        child: Chip(
+                          label: Text(category.name),
+                          backgroundColor: Color(0xFFd0b258),
+                          labelStyle: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
               ),
             ),
 

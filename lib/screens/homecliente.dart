@@ -194,8 +194,8 @@ class _HomeclienteState extends State<Homecliente> {
 
             SizedBox(height: 25),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: 270),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushReplacement(

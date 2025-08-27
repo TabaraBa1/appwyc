@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wyc/screens/product_client.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:wyc/screens/payments_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -53,7 +54,6 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  // Fonction pour afficher la boîte de dialogue de confirmation avant de supprimer un produit
   Future<void> confirmRemoveFromCart(String productId) async {
     showDialog(
       context: context,
@@ -61,42 +61,29 @@ class _CartPageState extends State<CartPage> {
         return AlertDialog(
           title: Text(
             'Confirmer la suppression',
-            style: TextStyle(
-              color: Color.fromARGB(255, 14, 13, 13), // Couleur du titre
-            ),
+            style: TextStyle(color: Color.fromARGB(255, 14, 13, 13)),
           ),
           content: Text(
             'Êtes-vous sûr de vouloir supprimer ce produit de votre panier ?',
-            style: TextStyle(
-              // Couleur du titre
-            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(
-                  context,
-                ).pop(); // Ferme la boîte de dialogue sans rien faire
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Annuler',
-                style: TextStyle(
-                  color: Color(0xFFd0b258), // Couleur du titre
-                ),
+                style: TextStyle(color: Color(0xFFd0b258)),
               ),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Ferme la boîte de dialogue
-                removeFromCart(
-                  productId,
-                ); // Effectue la suppression si confirmé
+                Navigator.of(context).pop();
+                removeFromCart(productId);
               },
               child: Text(
                 'Confirmer',
-                style: TextStyle(
-                  color: Color(0xFFd0b258), // Couleur du titre
-                ),
+                style: TextStyle(color: Color(0xFFd0b258)),
               ),
             ),
           ],
@@ -121,7 +108,6 @@ class _CartPageState extends State<CartPage> {
       );
 
       if (response.statusCode == 200) {
-        // Vérifie que le produit est supprimé de la liste cartItems
         setState(() {
           cartItems.removeWhere((item) => item['id'].toString() == productId);
         });
@@ -141,8 +127,7 @@ class _CartPageState extends State<CartPage> {
     super.initState();
     getCheckoutItems();
     _bannerAd = BannerAd(
-      adUnitId:
-          'ca-app-pub-3617476928520921/4470968717', // ID de test bannières
+      adUnitId: 'ca-app-pub-3617476928520921/4470968717', // ID réel ou test
       size: AdSize.banner,
       request: AdRequest(),
       listener: BannerAdListener(
@@ -161,8 +146,16 @@ class _CartPageState extends State<CartPage> {
 
   @override
   void dispose() {
-    _bannerAd.dispose(); // 👈 ici on libère la ressource pub
+    _bannerAd.dispose();
     super.dispose();
+  }
+
+  double getTotalAmount() {
+    double total = 0;
+    for (var item in cartItems) {
+      total += (item['price'] ?? 0) * (item['quantity'] ?? 1);
+    }
+    return total;
   }
 
   @override
@@ -173,85 +166,156 @@ class _CartPageState extends State<CartPage> {
           'Mon Panier',
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: Colors.black, // Couleur du texte
+            fontSize: 18,
+            color: Colors.black,
           ),
         ),
+        backgroundColor: Color(0xFFd0b258),
+        centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // Affichage des éléments du panier
+      body:
           isLoading
               ? Center(child: CircularProgressIndicator())
-              : Expanded(
-                child: ListView.builder(
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: ListTile(
-                        leading: GestureDetector(
-                          onTap: () {
-                            // Redirige vers la page ProductClient
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => ProductClient(
-                                      product: cartItems[index],
-                                    ),
-                              ),
-                            );
-                          },
-                          child: Image.network(
-                            cartItems[index]['image'] != null &&
-                                    cartItems[index]['image'].isNotEmpty
-                                ? cartItems[index]['image']
-                                : 'https://via.placeholder.com/150',
-                            width: 50,
-                            height: 50,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.network(
-                                'https://via.placeholder.com/150',
-                                width: 50,
-                                height: 50,
+              : cartItems.isEmpty
+              ? Center(
+                child: Text(
+                  'Votre panier est vide.',
+                  style: TextStyle(fontSize: 18),
+                ),
+              )
+              : Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: cartItems.length,
+                      itemBuilder: (context, index) {
+                        final item = cartItems[index];
+                        return Card(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: ListTile(
+                            leading:
+                                item['image'] != null
+                                    ? Image.network(
+                                      item['image'],
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    )
+                                    : Icon(Icons.image_not_supported),
+                            title: Text(item['name'] ?? 'Produit'),
+                            subtitle: Text(
+                              ' ${(item['price'] * (item['quantity'] ?? 1))} f',
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.remove_circle_outline,
+                                    color: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      if ((item['quantity'] ?? 1) > 1) {
+                                        item['quantity'] =
+                                            (item['quantity'] ?? 1) - 1;
+                                      }
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  '${item['quantity'] ?? 1}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.add_circle_outline,
+                                    color: Colors.green,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      item['quantity'] =
+                                          (item['quantity'] ?? 1) + 1;
+                                    });
+                                  },
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () {
+                                    confirmRemoveFromCart(
+                                      item['id'].toString(),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => ProductClient(product: item),
+                                ),
                               );
                             },
                           ),
-                        ),
-                        title: Text(cartItems[index]['name']),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 4),
-                            Text(
-                              'Prix: ${(cartItems[index]['price'] * cartItems[index]['qty']).toStringAsFixed(2)} FCF',
-                            ),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            confirmRemoveFromCart(
-                              cartItems[index]['id'].toString(),
-                            );
-                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFd0b258),
+
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
-                    );
-                  },
-                ),
+                      onPressed: () {
+                        if (cartItems.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Le panier est vide.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+                        double totalAmount = getTotalAmount();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => PaymentsPage(
+                                  totalAmount: totalAmount,
+                                  products:
+                                      cartItems, // au lieu de product: cartItems
+                                ),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Passer au paiement',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  if (_isBannerAdReady)
+                    Container(
+                      height: _bannerAd.size.height.toDouble(),
+                      width: _bannerAd.size.width.toDouble(),
+                      child: AdWidget(ad: _bannerAd),
+                    ),
+                ],
               ),
-
-          // Affichage de la bannière si elle est prête
-          if (_isBannerAdReady)
-            Container(
-              width: _bannerAd.size.width.toDouble(),
-              height: _bannerAd.size.height.toDouble(),
-              child: AdWidget(ad: _bannerAd),
-            ),
-        ],
-      ),
     );
   }
 }

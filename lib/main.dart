@@ -11,9 +11,9 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize(); // Initialisation d'AdMob
   // Déclare ton device comme un device de test
-  MobileAds.instance.updateRequestConfiguration(
-    RequestConfiguration(testDeviceIds: ['6699E2F8423ECF37391D8E51B6D52A42']),
-  );
+  // MobileAds.instance.updateRequestConfiguration(
+  //   RequestConfiguration(testDeviceIds: ['6699E2F8423ECF37391D8E51B6D52A42']),
+  // );
   runApp(MyApp());
 }
 

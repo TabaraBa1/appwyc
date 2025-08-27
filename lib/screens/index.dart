@@ -29,8 +29,10 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color(0xFFd0b258), elevation: 0),
-      backgroundColor: Color(0xFFd0b258),
+      // appBar: AppBar(backgroundColor: Color(0xFFd0b258), elevation: 0),
+      // backgroundColor: Color(0xFFd0b258),
+      appBar: AppBar(backgroundColor: Colors.white, elevation: 0),
+      backgroundColor: Colors.white,
       body: Center(
         child: SingleChildScrollView(
           child: Column(

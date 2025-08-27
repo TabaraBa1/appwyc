@@ -1,4 +1,5 @@
-package com.example.my_new_project
+package com.wyc.app
+
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -92,9 +92,9 @@ class _AddProductState extends State<AddProduct> {
       });
 
       // Après avoir sélectionné l'image, vous pouvez afficher le nom directement
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('image selectionne : $_imageName')),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('image selectionne : $_imageName')),
+      // );
     }
   }
 

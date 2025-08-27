@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wyc/screens/product_cart.dart';
 import 'package:wyc/screens/payement_page.dart';
+
 // import 'package:file_picker/file_picker.dart';
 
 // import 'package:google_fonts/google_fonts.dart';
@@ -60,7 +61,7 @@ class _ProductClientState extends State<ProductClient> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'Erreur lors de l\'ajout au panier: ${response.statusCode}',
+              'Ce produit existe deja dans le panier: ${response.statusCode}',
             ),
           ),
         );
@@ -143,10 +144,10 @@ class _ProductClientState extends State<ProductClient> {
 
   @override
   Widget build(BuildContext context) {
-    double totalAmount =
+    final totalAmount =
         cartItems.isNotEmpty
             ? (widget.product['price'] as num).toDouble() *
-                (cartItems[0]['qty'] as num).toDouble()
+                (cartItems[0]['qty'] as num)
             : (widget.product['price'] as num).toDouble() * 1.0;
 
     return Scaffold(
@@ -300,12 +301,7 @@ class _ProductClientState extends State<ProductClient> {
                                         41,
                                         13,
                                       ), // Couleur de fond pour le bouton "+"
-                                      borderRadius: BorderRadius.circular(
-                                        4,
-                                      ), // Coins carrés
-                                      // border: Border.all(
-                                      //     color: Colors.black,
-                                      //     width: 1), // Bordure noire
+                                      borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: IconButton(
                                       icon: Icon(
@@ -362,6 +358,7 @@ class _ProductClientState extends State<ProductClient> {
                                       builder:
                                           (context) => PaymentPage(
                                             totalAmount: totalAmount,
+                                            product: widget.product,
                                           ),
                                     ),
                                   );

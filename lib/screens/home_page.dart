@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 "Annuler",
                 style: TextStyle(
-                  color: Color(0xFFd0b258), // Couleur du titre
+                  color: Color.fromARGB(255, 26, 25, 25), // Couleur du titre
                 ),
               ),
             ),
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 "Se déconnecter",
                 style: TextStyle(
-                  color: Color(0xFFd0b258), // Couleur du titre
+                  color: Color.fromARGB(255, 41, 40, 39), // Couleur du titre
                 ),
               ),
             ),
@@ -157,20 +157,20 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          Positioned(
-            bottom: 10,
-            right: 80, // Positionne à gauche pour éviter la superposition
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UsersPage()),
-                );
-              },
-              backgroundColor: Colors.black,
-              child: Icon(Icons.people, color: Color(0xFFd0b258)),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 10,
+          //   right: 80, // Positionne à gauche pour éviter la superposition
+          //   child: FloatingActionButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => UsersPage()),
+          //       );
+          //     },
+          //     backgroundColor: Colors.black,
+          //     child: Icon(Icons.people, color: Color(0xFFd0b258)),
+          //   ),
+          // ),
         ],
       ),
       appBar: AppBar(

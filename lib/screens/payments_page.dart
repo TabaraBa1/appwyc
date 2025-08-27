@@ -7,33 +7,32 @@ import 'package:google_fonts/google_fonts.dart';
 
 class SecureStorage {
   final FlutterSecureStorage _storage = FlutterSecureStorage();
-  String paymentMethod = "wave";
+
   Future<String?> getToken() async {
     return await _storage.read(key: 'auth_token');
   }
 }
 
-class PaymentPage extends StatefulWidget {
+class PaymentsPage extends StatefulWidget {
+  final List<dynamic> products; // Liste de produits
   final double totalAmount;
-  final Map product;
-  const PaymentPage({
-    super.key,
+
+  const PaymentsPage({
+    Key? key,
+    required this.products,
     required this.totalAmount,
-    required this.product,
-  });
+  }) : super(key: key);
 
   @override
-  _PaymentPageState createState() => _PaymentPageState();
+  _PaymentsPageState createState() => _PaymentsPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _PaymentsPageState extends State<PaymentsPage> {
   String paymentMethod = "wave";
   String clientNumber = '774465244';
-  String telephone = '774465244';
   String selectedRegion = 'Dakar';
-  double deliveryFee = 2000; // ✅ Frais par défaut pour Tambacounda
-  String deliveryMessage =
-      'Livraison à Dakar sous 48 h, frais : 2000 f.'; // ✅ Message par défaut
+  double deliveryFee = 2000; // Frais par défaut pour Dakar
+  String deliveryMessage = 'Livraison à Dakar sous 48 h, frais : 2000 f.';
 
   final SecureStorage secureStorage = SecureStorage();
   final RegExp senegalPhoneRegex = RegExp(r'^(77|78|70|76|75)\d{7}$');
@@ -110,14 +109,18 @@ class _PaymentPageState extends State<PaymentPage> {
 
     final double finalAmount = widget.totalAmount + deliveryFee;
 
+    // Exemple : on prend le premier produit pour le nom (à adapter si besoin)
+    final productName =
+        widget.products.isNotEmpty ? widget.products[0]['name'] : "Produit";
+
     print('Données envoyées à PayTech :');
     print({
-      "item_name": widget.product['name'],
+      "item_name": productName,
       "payment_method": paymentMethod,
       "item_price": finalAmount,
       "currency": "XOF",
       "ref_command": refCommand,
-      "command_name": widget.product['name'],
+      "command_name": productName,
       "ipn_url":
           "https://floating-sea-30778-fbe8564bd579.herokuapp.com/api/payment/ipn",
       "success_url": "https://paytech.sn/mobile/success",
@@ -134,12 +137,12 @@ class _PaymentPageState extends State<PaymentPage> {
         "Authorization": "Bearer $token",
       },
       body: json.encode({
-        "item_name": widget.product['name'],
+        "item_name": productName,
         "amount": finalAmount,
         "payment_method": paymentMethod,
         "currency": "XOF",
         "ref_command": refCommand,
-        "command_name": widget.product['name'],
+        "command_name": productName,
         "ipn_url":
             "https://floating-sea-30778-fbe8564bd579.herokuapp.com/api/payment/ipn",
         "success_url": "https://paytech.sn/mobile/success",
@@ -186,7 +189,7 @@ class _PaymentPageState extends State<PaymentPage> {
       appBar: AppBar(
         backgroundColor: Color(0xFFd0b258),
         title: Text(
-          'Informations personelles ',
+          'Informations personnelles',
           style: GoogleFonts.montserrat(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -308,35 +311,24 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
               ),
+
             SizedBox(height: 30),
             Center(
               child: ElevatedButton(
                 onPressed: () async {
+                  // Validation du numéro de téléphone avant de continuer
                   if (!senegalPhoneRegex.hasMatch(clientNumber)) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          'Veuillez entrer un numéro valide au Sénégal (77, 78, 70, 76, 75).',
+                          "Numéro de téléphone invalide, doit commencer par 77,78,70,76, ou 75 et faire 9 chiffres.",
                         ),
-                        backgroundColor: Colors.red,
                       ),
                     );
                     return;
                   }
-
-                  if (clientNumber.isNotEmpty) {
-                    await updateUserInfo();
-                    makePayment();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Veuillez entrer votre numéro de client.',
-                        ),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
+                  await updateUserInfo();
+                  await makePayment();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFFd0b258),
