@@ -4,48 +4,76 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+
 	<key>CFBundleDisplayName</key>
 	<string>My New Project</string>
+
+	<!-- Permissions iOS -->
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>Cette application a besoin d’accéder à votre photothèque pour vous permettre de sélectionner des images ou des fichiers.</string>
+    <string>Cette application a besoin d’accéder à votre photothèque pour sélectionner des images ou des fichiers.</string>
+
     <key>NSCameraUsageDescription</key>
     <string>Cette application a besoin d’accéder à la caméra pour prendre des photos ou des vidéos.</string>
+
     <key>NSMicrophoneUsageDescription</key>
     <string>Cette application a besoin d’accéder au microphone si vous enregistrez du son ou des vidéos.</string>
+
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Cette application a besoin d’ajouter des photos à votre photothèque.</string>
+
     <key>NSFileProviderDomainUsageDescription</key>
     <string>Cette application a besoin d’accéder à vos fichiers pour les sélectionner et les envoyer.</string>
+
     <key>NSUserTrackingUsageDescription</key>
     <string>Cette application peut utiliser votre identifiant publicitaire pour vous proposer du contenu personnalisé.</string>
-    <key>CFBundleExecutable</key>
+
+    <!-- ⚡ Ajout recommandé pour la localisation -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Cette application a besoin de votre position pour améliorer certaines fonctionnalités.</string>
+
+	<!-- Identité app -->
+	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+
 	<key>CFBundleName</key>
 	<string>my_new_project</string>
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- Lancement -->
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
+	<!-- Orientation -->
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -53,10 +81,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- Perf -->
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Réseau : autoriser les appels HTTP -->
 	<key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsArbitraryLoads</key>
