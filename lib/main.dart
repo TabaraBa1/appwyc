@@ -5,11 +5,11 @@ import 'package:wyc/screens/regis_ter.dart';
 import 'package:wyc/screens/index.dart';
 // import 'package:wyc/screens/log_in.dart';
 import 'dart:async';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize(); // Initialisation d'AdMob
+  // MobileAds.instance.initialize(); // Initialisation d'AdMob
   // Déclare ton device comme un device de test
   // MobileAds.instance.updateRequestConfiguration(
   //   RequestConfiguration(testDeviceIds: ['6699E2F8423ECF37391D8E51B6D52A42']),
