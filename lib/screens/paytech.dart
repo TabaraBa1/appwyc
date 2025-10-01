@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class PayTech extends StatefulWidget {
   final String paymentUrl;
@@ -13,46 +13,46 @@ class PayTech extends StatefulWidget {
 }
 
 class _PayTechState extends State<PayTech> {
-  late InterstitialAd _interstitialAd;
-  bool _isInterstitialAdReady = false;
+  // late InterstitialAd _interstitialAd;
+  // bool _isInterstitialAdReady = false;
   late InAppWebViewController _webViewController;
   double progress = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _loadInterstitialAd(); // Charger l'annonce interstitielle à l'initialisation
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _loadInterstitialAd(); // Charger l'annonce interstitielle à l'initialisation
+  // }
 
   // Charger l'annonce interstitielle
-  void _loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3617476928520921/5163672664', // ID de test
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (InterstitialAd ad) {
-          setState(() {
-            _interstitialAd = ad;
-            _isInterstitialAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          print('Failed to load interstitial ad: ${error.message}');
-        },
-      ),
-    );
-  }
+  // void _loadInterstitialAd() {
+  //   InterstitialAd.load(
+  //     adUnitId: 'ca-app-pub-3617476928520921/5163672664', // ID de test
+  //     request: AdRequest(),
+  //     adLoadCallback: InterstitialAdLoadCallback(
+  //       onAdLoaded: (InterstitialAd ad) {
+  //         setState(() {
+  //           _interstitialAd = ad;
+  //           _isInterstitialAdReady = true;
+  //         });
+  //       },
+  //       onAdFailedToLoad: (LoadAdError error) {
+  //         print('Failed to load interstitial ad: ${error.message}');
+  //       },
+  //     ),
+  //   );
+  // }
 
   // Affichage de l'annonce interstitielle
-  void _showInterstitialAd() {
-    if (_isInterstitialAdReady) {
-      _interstitialAd.show();
-      // Recharger l'annonce après l'affichage
-      _loadInterstitialAd();
-    } else {
-      print('Interstitial ad is not ready yet.');
-    }
-  }
+  // void _showInterstitialAd() {
+  //   if (_isInterstitialAdReady) {
+  //     _interstitialAd.show();
+  //     // Recharger l'annonce après l'affichage
+  //     _loadInterstitialAd();
+  //   } else {
+  //     print('Interstitial ad is not ready yet.');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,17 +103,16 @@ class _PayTechState extends State<PayTech> {
                 if (url.toString().contains("success")) {
                   _showPaymentStatus(
                     isSuccess: true,
-                    message:
-                        "Votre paiement a été effectué avec succès ! 🎉 ",
+                    message: "Votre paiement a été effectué avec succès ! 🎉 ",
                   );
-                  _showInterstitialAd(); // Afficher l'annonce interstitielle après le succès
+                  // _showInterstitialAd(); // Afficher l'annonce interstitielle après le succès
                 } else if (url.toString().contains("cancel") ||
                     url.toString().contains("failure")) {
                   _showPaymentStatus(
                     isSuccess: false,
                     message: "Votre paiement a échoué ou a été annulé. ❌",
                   );
-                  _showInterstitialAd(); // Afficher l'annonce interstitielle après l'échec ou l'annulation
+                  // _showInterstitialAd(); // Afficher l'annonce interstitielle après l'échec ou l'annulation
                 }
               },
             ),
@@ -179,11 +178,11 @@ class _PayTechState extends State<PayTech> {
     );
   }
 
-  @override
-  void dispose() {
-    if (_isInterstitialAdReady) {
-      _interstitialAd.dispose();
-    }
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   if (_isInterstitialAdReady) {
+  //     _interstitialAd.dispose();
+  //   }
+  //   super.dispose();
+  // }
 }

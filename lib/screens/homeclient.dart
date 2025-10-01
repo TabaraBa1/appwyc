@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:wyc/screens/product_client.dart';
 import 'package:wyc/screens/product_cart.dart';
 import 'package:wyc/screens/homecliente.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class Category {
@@ -23,8 +23,8 @@ class Homeclient extends StatefulWidget {
 }
 
 class _HomeclientState extends State<Homeclient> {
-  late BannerAd _bannerAd;
-  bool _isBannerAdReady = false;
+  // late BannerAd _bannerAd;
+  // bool _isBannerAdReady = false;
 
   final String productsUrl =
       'https://floating-sea-30778-fbe8564bd579.herokuapp.com/api/products';
@@ -40,23 +40,23 @@ class _HomeclientState extends State<Homeclient> {
     super.initState();
     fetchCategories(); // Fetch categories when the screen loads
     getProducts();
-    _bannerAd = BannerAd(
-      adUnitId:
-          'ca-app-pub-3617476928520921/4470968717', // ID de test bannières
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Failed to load a banner ad: ${error.message}');
-          ad.dispose();
-        },
-      ),
-    )..load();
+    // _bannerAd = BannerAd(
+    //   adUnitId:
+    //       'ca-app-pub-3617476928520921/4470968717', // ID de test bannières
+    //   size: AdSize.banner,
+    //   request: AdRequest(),
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (Ad ad) {
+    //       setState(() {
+    //         _isBannerAdReady = true;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //       print('Failed to load a banner ad: ${error.message}');
+    //       ad.dispose();
+    //     },
+    //   ),
+    // )..load();
   }
 
   Future<void> getProducts() async {
@@ -94,11 +94,10 @@ class _HomeclientState extends State<Homeclient> {
   }
 
   @override
-  void dispose() {
-    _bannerAd.dispose(); // 👈 ici on libère la ressource pub
-    super.dispose();
-  }
-
+  // void dispose() {
+  //   _bannerAd.dispose(); // 👈 ici on libère la ressource pub
+  //   super.dispose();
+  // }
   // Récupérer les catégories depuis l'API
   Future<void> fetchCategories() async {
     final response = await http.get(
@@ -418,12 +417,12 @@ class _HomeclientState extends State<Homeclient> {
               ),
             ),
             SizedBox(height: 20),
-            if (_isBannerAdReady)
-              Container(
-                width: _bannerAd.size.width.toDouble(),
-                height: _bannerAd.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd),
-              ),
+            // if (_isBannerAdReady)
+            //   Container(
+            //     width: _bannerAd.size.width.toDouble(),
+            //     height: _bannerAd.size.height.toDouble(),
+            //     child: AdWidget(ad: _bannerAd),
+            //   ),
           ],
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:wyc/screens/product_client.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wyc/screens/payments_page.dart';
 
 class CartPage extends StatefulWidget {
@@ -15,7 +15,7 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  late BannerAd _bannerAd;
+  // late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   final FlutterSecureStorage _storage = FlutterSecureStorage();
   List cartItems = [];
@@ -126,29 +126,29 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     getCheckoutItems();
-    _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3617476928520921/4470968717', // ID réel ou test
-      size: AdSize.banner,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Failed to load a banner ad: ${error.message}');
-          ad.dispose();
-        },
-      ),
-    )..load();
+    // _bannerAd = BannerAd(
+    //   adUnitId: 'ca-app-pub-3617476928520921/4470968717', // ID réel ou test
+    //   size: AdSize.banner,
+    //   request: AdRequest(),
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (Ad ad) {
+    //       setState(() {
+    //         _isBannerAdReady = true;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //       print('Failed to load a banner ad: ${error.message}');
+    //       ad.dispose();
+    //     },
+    //   ),
+    // )..load();
   }
 
-  @override
-  void dispose() {
-    _bannerAd.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _bannerAd.dispose();
+  //   super.dispose();
+  // }
 
   double getTotalAmount() {
     double total = 0;
@@ -308,12 +308,12 @@ class _CartPageState extends State<CartPage> {
                       ),
                     ),
                   ),
-                  if (_isBannerAdReady)
-                    Container(
-                      height: _bannerAd.size.height.toDouble(),
-                      width: _bannerAd.size.width.toDouble(),
-                      child: AdWidget(ad: _bannerAd),
-                    ),
+                  // if (_isBannerAdReady)
+                  //   Container(
+                  //     height: _bannerAd.size.height.toDouble(),
+                  //     width: _bannerAd.size.width.toDouble(),
+                  //     child: AdWidget(ad: _bannerAd),
+                  //   ),
                 ],
               ),
     );
