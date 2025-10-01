@@ -6,7 +6,7 @@ import 'package:wyc/screens/product_cart.dart';
 import 'package:wyc/screens/homeclient.dart';
 // import 'package:site/screens/profile.dart';
 import 'package:wyc/screens/api_service.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class Homecliente extends StatefulWidget {
   const Homecliente({super.key, required this.userName});
@@ -16,7 +16,7 @@ class Homecliente extends StatefulWidget {
 }
 
 class _HomeclienteState extends State<Homecliente> {
-  late BannerAd _bannerAd;
+  // late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
   final String productsUrl =
       'https://floating-sea-30778-fbe8564bd579.herokuapp.com/api/products';
@@ -32,23 +32,23 @@ class _HomeclienteState extends State<Homecliente> {
   void initState() {
     super.initState();
     getProducts();
-    _bannerAd = BannerAd(
-      adUnitId:
-          'ca-app-pub-3617476928520921/4470968717', // ID de test bannières
-      size: AdSize.largeBanner, // Utilisez une taille plus grande
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Failed to load a banner ad: ${error.message}');
-          ad.dispose();
-        },
-      ),
-    )..load();
+    // _bannerAd = BannerAd(
+    //   adUnitId:
+    //       'ca-app-pub-3617476928520921/4470968717', // ID de test bannières
+    //   size: AdSize.largeBanner, // Utilisez une taille plus grande
+    //   request: AdRequest(),
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (Ad ad) {
+    //       setState(() {
+    //         _isBannerAdReady = true;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (Ad ad, LoadAdError error) {
+    //       print('Failed to load a banner ad: ${error.message}');
+    //       ad.dispose();
+    //     },
+    //   ),
+    // )..load();
   }
 
   // Récupération des produits depuis l'API
@@ -132,11 +132,11 @@ class _HomeclienteState extends State<Homecliente> {
     });
   }
 
-  @override
-  void dispose() {
-    _bannerAd.dispose(); // 👈 ici on libère la ressource pub
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _bannerAd.dispose(); // 👈 ici on libère la ressource pub
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +337,7 @@ class _HomeclienteState extends State<Homecliente> {
                       context,
                     ).size.width, // Largeur complète de l'écran
                 height: 100.0, // Ajustez la hauteur selon vos besoins
-                child: AdWidget(ad: _bannerAd),
+                // child: AdWidget(ad: _bannerAd),
               ),
 
             SizedBox(height: 5),
