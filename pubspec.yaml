@@ -34,19 +34,19 @@ dependencies:
   image_picker: ^1.0.7  
   file_picker: ^10.0.0
   # intl_phone_number_input: ^0.7.0+2
-  fl_chart: ^0.70.2
+  fl_chart: ^1.1.0
   flutter_secure_storage: ^9.2.4
   image: ^4.5.3
-  flutter_image_compress: 1.1.3
-  webview_flutter_wkwebview: 2.9.5
-  flutter_inappwebview: 5.7.2+3
-  paytech: ^4.0.1
+  flutter_image_compress: ^2.4.0
+  webview_flutter_wkwebview: ^3.23.0
+  flutter_inappwebview: ^6.1.5
+  paytech: ^5.0.2
   http: ^1.3.0
   path_provider: ^2.1.5
-  permission_handler: ^11.4.0
+  permission_handler: ^12.0.1
   # permission_handler: ^13.0.1
   # webview_flutter: ^4.10.0
-  google_fonts: 6.2.1
+  google_fonts: ^6.3.2
   intl: ^0.20.2 
   cloudinary_sdk: ^5.0.0+1
   # image_picker: ^0.8.5+3 

@@ -84,8 +84,7 @@ class _PayTechState extends State<PayTech> {
             ),
           Expanded(
             child: InAppWebView(
-              initialUrlRequest: URLRequest(url: Uri.parse(widget.paymentUrl)),
-
+              // initialUrlRequest: URLRequest(url: Uri.parse(widget.paymentUrl)),
               onWebViewCreated: (controller) {
                 _webViewController = controller;
               },
